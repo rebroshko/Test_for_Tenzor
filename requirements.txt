@@ -1,6 +1,6 @@
-selenium==4.1.3
-pytest==7.1.1
-pyperclip==1.8.1
+selenium==4.1.5
+pytest==7.1.2
 requests==2.27.1
-mouse==0.6.0
 PyAutoGUI==0.9.53
+allure-pytest==2.9.45
+
