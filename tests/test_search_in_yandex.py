@@ -1,10 +1,11 @@
 import pytest
+from pages.locators import BaseLocator
 from pages.main_page import MainPage
 
 
 @pytest.mark.usefixtures('browser')
 def test_yandex_search_output(browser):
-    link = 'https://yandex.ru/'
+    link = BaseLocator.BASE_URL
     page = MainPage(browser, link)          # initial Page Object
     page.open()                             # open_yandex_page
     page.check_visible_search_panel()

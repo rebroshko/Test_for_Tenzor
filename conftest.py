@@ -3,7 +3,6 @@ from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 
 
-
 @pytest.fixture
 def get_chrome_options():
     options = webdriver.ChromeOptions()
@@ -16,7 +15,7 @@ def get_chrome_options():
 @pytest.fixture(scope='function')
 def browser(get_chrome_options):
     options = get_chrome_options
-    path_driver = Service('/Users/insafsibgatullin/Downloads/chromedriver')  # Driver Chrome path
+    path_driver = Service()  # Driver Chrome path
     browser = webdriver.Chrome(service=path_driver, options=options)
     yield browser
     browser.quit()

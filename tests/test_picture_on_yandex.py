@@ -1,11 +1,12 @@
 import pytest
+from pages.locators import BaseLocator
 from pages.main_page import MainPage
 from pages.picture_page import PicturePage
 
 
 @pytest.mark.usefixtures('browser')
 def test_picture_on_yandex(browser):
-    link = 'https://yandex.ru/'
+    link = BaseLocator.BASE_URL
     page = MainPage(browser, link)          # initial Page Object
     page.open()                                # open_yandex_page
     page.check_link_picture_is_present()
