@@ -1,9 +1,8 @@
 import os
-
 import pyautogui
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from pages.locators import BaseLocator, BasePictureLocators
+from pages.locators import BaseLocator
 
 
 class BasePage:
@@ -34,7 +33,10 @@ class BasePage:
         self.browser.switch_to.window(self.browser.window_handles[tab_number])
 
     def mouse_move(self):
-        pyautogui.moveTo(500, 500, duration=1, tween=pyautogui.easeInOutQuad)
+        x, y = pyautogui.size()
+        x = x/2
+        y = y/2
+        pyautogui.moveTo(x, y, 2, pyautogui.easeInOutQuad)
 
     def del_temporary_img(self, file_name):
         os.remove(file_name)

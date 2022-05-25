@@ -1,11 +1,7 @@
-import time
 import requests
 from .locators import BaseLocator, BasePictureLocators
 from .base_page import BasePage
 from .logic_for_hashing import LogicForHashing
-from selenium.webdriver.common.keys import Keys
-import pyperclip
-from selenium.webdriver.common.action_chains import ActionChains
 
 
 class PicturePage(BasePage, LogicForHashing):
@@ -24,23 +20,8 @@ class PicturePage(BasePage, LogicForHashing):
         return link_on_first_cat, text_is_name_cat
 
     def go_check_equal_search_data_and_cat_name(self, text_is_name_cat):
-        search_data_cat_name = self.get_text_from_search_field()
-        #print(text_is_name_cat)
-        print(search_data_cat_name)
-        assert text_is_name_cat.strip(' ') == search_data_cat_name, 'Category name and search field data dont equal'
-
-    def get_text_from_search_field(self):
-        assert self.check_visible_element(*BasePictureLocators.SEARCH_INPUT_FIELD), 'Not found input field'
-        search_data_cat_name_id = self.found_element(*BasePictureLocators.SEARCH_INPUT_FIELD)
-        Chains = ActionChains(self.browser)
-        Chains.double_click(search_data_cat_name_id).perform()
-        time.sleep(0.1)
-        Chains.click(search_data_cat_name_id)
-        Chains.key_down(Keys.CONTROL).send_keys('c').key_up(Keys.CONTROL).perform()
-        search_data_cat_name = pyperclip.paste()
-        time.sleep(1)
-        #Chains.click(BasePictureLocators.FRAME)
-        return search_data_cat_name
+        search_data_cat_name = self.found_element(*BasePictureLocators.SEARCH_INPUT_FIELD).get_attribute('value')
+        assert text_is_name_cat == search_data_cat_name, 'Category name and search field data dont equal'
 
     def open_first_photo(self):
         assert self.check_visible_element(*BasePictureLocators.FIRST_PHOTO_IN_CATEGORY), 'First photo not found'
@@ -84,4 +65,7 @@ class PicturePage(BasePage, LogicForHashing):
         except Exception as _ex:
             raise 'Error download image'
 
+    def check_first_and_last_picture_equal(self):
+        container = self.HASH_CONTAINER
+        assert container[0] == container[2], 'Error first and last page no equal'
 
