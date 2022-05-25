@@ -22,22 +22,16 @@ def test_picture_on_yandex(browser):
     photo_category_page.check_picture_has_opened_full()
     photo_category_page.download_page()
     photo_category_page.get_slide_to_next_photo()
-    time.sleep(1)
-    # photo_category_page.download_page()
-    # photo_category_page.check_picture_change()
+    photo_category_page.download_page()
+    photo_category_page.check_picture_change()
     photo_category_page.get_slide_to_back_photo()
-    time.sleep(1)
     # photo_category_page.download_page()
 
 
 
     # Дописать логику для сравнения названия категории и данными в поле , нет данных из поля
-    # Скачать фото - (отдельный модуль - создать папку - хешировать = хранить)
+
     # 6) Проверить, что название категории отображается в поле поиска
-    # 10)	Проверить, что картинка сменилась
     # 12)	Проверить, что картинка осталась из шага
 
-
-    # логирование
-    # тестирование без окна
 

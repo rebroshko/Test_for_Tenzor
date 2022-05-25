@@ -1,3 +1,5 @@
+import os
+
 import pyautogui
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -34,3 +36,5 @@ class BasePage:
     def mouse_move(self):
         pyautogui.moveTo(500, 500, duration=1, tween=pyautogui.easeInOutQuad)
 
+    def del_temporary_img(self, file_name):
+        os.remove(file_name)

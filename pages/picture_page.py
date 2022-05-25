@@ -1,14 +1,14 @@
 import time
-import urllib
 import requests
 from .locators import BaseLocator, BasePictureLocators
 from .base_page import BasePage
+from .logic_for_hashing import LogicForHashing
 from selenium.webdriver.common.keys import Keys
 import pyperclip
 from selenium.webdriver.common.action_chains import ActionChains
 
 
-class PicturePage(BasePage):
+class PicturePage(BasePage, LogicForHashing):
     def check_correct_switch(self):
         self.check_where_place(BaseLocator.REFERENCE_SWITCH_URL, 'Error switch to picture page - error link')
 
@@ -25,13 +25,21 @@ class PicturePage(BasePage):
 
     def go_check_equal_search_data_and_cat_name(self, text_is_name_cat):
         search_data_cat_name = self.get_text_from_search_field()
-        assert text_is_name_cat == search_data_cat_name, 'Category name and search field data dont equal'
+        #print(text_is_name_cat)
+        print(search_data_cat_name)
+        assert text_is_name_cat.strip(' ') == search_data_cat_name, 'Category name and search field data dont equal'
 
     def get_text_from_search_field(self):
         assert self.check_visible_element(*BasePictureLocators.SEARCH_INPUT_FIELD), 'Not found input field'
-        search_data_cat_name = self.found_element(*BasePictureLocators.SEARCH_INPUT_FIELD).get_attribute('text')
-        print(f'ТУТ ДОЛЖНА БЫТЬ СТРОКА {search_data_cat_name}')
-        time.sleep(5)
+        search_data_cat_name_id = self.found_element(*BasePictureLocators.SEARCH_INPUT_FIELD)
+        Chains = ActionChains(self.browser)
+        Chains.double_click(search_data_cat_name_id).perform()
+        time.sleep(0.1)
+        Chains.click(search_data_cat_name_id)
+        Chains.key_down(Keys.CONTROL).send_keys('c').key_up(Keys.CONTROL).perform()
+        search_data_cat_name = pyperclip.paste()
+        time.sleep(1)
+        #Chains.click(BasePictureLocators.FRAME)
         return search_data_cat_name
 
     def open_first_photo(self):
@@ -53,10 +61,27 @@ class PicturePage(BasePage):
         self.found_element(*BasePictureLocators.BACK_BUTTON).click()
 
     def check_picture_change(self):
-        pass
+        container = self.HASH_CONTAINER
+        assert container[0] != container[1], 'Error first and second page have equal hash'
 
     def download_page(self):
-        assert self.check_visible_element(*BasePictureLocators.PICTURE_LINK), 'Not found url for save page'
-        url = self.found_element(*BasePictureLocators.PICTURE_LINK).get_attribute('href')
-        print(url)
+        file_name = 'temporary_img.jpg'
+        url = self.get_page_url()
+        self.logic_for_download_img(file_name, url)
+        self.transform_img_in_hash(file_name)
+        self.del_temporary_img(file_name)
+
+    def get_page_url(self):
+        assert self.check_visible_element(*BasePictureLocators.PAGE_LINK), 'Not found url for save page'
+        url = self.found_element(*BasePictureLocators.PAGE_LINK).get_attribute('href')
+        return url
+
+    def logic_for_download_img(self, file_name, url):
+        try:
+            response = requests.get(url=url)
+            with open(file_name, 'wb') as file:
+                file.write(response.content)
+        except Exception as _ex:
+            raise 'Error download image'
+
 
